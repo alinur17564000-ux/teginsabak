@@ -22,19 +22,14 @@
 <div class="form-wrap">
   <h1>Тегін сабақ</h1>
   <p>Үйде отырып табыс табуды үйренгіңіз келсе, төмендегі форманы толтырыңыз.</p>
-
   <label>Имя</label>
   <input type="text" id="name" placeholder="Ат/Имя">
-
   <label>Телефон</label>
   <input type="tel" id="phone" value="+7" placeholder="+7">
-
   <button id="btn" onclick="submitForm()">Тегін сабақты көру</button>
   <p class="msg" id="msg"></p>
 </div>
-
 <script>
-  // ← СЮДА вставь свой URL из Apps Script
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNu2jzX9_p7GAhrp0XA0BqufCorxjPan56raF1pXhdhY--ECGt7IK9w8ek08avuSfO4A/exec";
 
   function submitForm() {
@@ -51,13 +46,15 @@
     btn.disabled = true;
     btn.textContent = "Отправляем...";
 
+    var formData = new FormData();
+    formData.append("name", name);
+    formData.append("phone", phone);
+
     fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify({ name: name, phone: phone }),
-      headers: { "Content-Type": "application/json" }
+      body: formData
     })
-    .then(r => r.json())
-    .then(data => {
+    .then(() => {
       msg.style.color = "green";
       msg.textContent = "Заявка принята! Мы свяжемся с вами.";
       btn.textContent = "Отправлено ✓";
